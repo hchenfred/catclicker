@@ -19,14 +19,17 @@ var data = "%data%";
 for (var i = 0; i < cats.length; i++) {
   var formattedHTMLTitle = htmlTitle.replace(data, cats[i].numOfClicks);
   var formattedHTMLImg = htmlImg.replace(data, cats[i].img).replace("%element%", cats[i].elementName);
+  //element is not in the environment of the closure for return function()
   var element = '#' + cats[i].elementName;
   $(element).append(formattedHTMLTitle, formattedHTMLImg);
-  $(element).on('click', (function(){
-    cats[i].numOfClicks++;
+  $(element).on('click', (function(x){
+    // the parameter x is in the enviroment of the closure for the inner function
     return function() {    
-      $(element).text("clicked " + cats[i].numOfClicks + " times");
+      cats[x].numOfClicks++;
+      console.log($(element).val());
+      $('#' + cats[x].elementName).find('h1').text("clicked " + cats[x].numOfClicks + " times");
     };
-  })());
+  })(i));
 }
 
 
